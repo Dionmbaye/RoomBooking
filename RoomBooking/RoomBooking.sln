@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomBooking.Api", "RoomBooking.Api\RoomBooking.Api.csproj", "{AE16CFCF-24F7-4311-A464-7802E5D14F99}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomBooking.Domain", "RoomBooking.Domain\RoomBooking.Domain.csproj", "{BA95ECA2-645F-4C9C-8BAE-0F011C9CD6C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomBooking.Dal", "RoomBooking.Dal\RoomBooking.Dal.csproj", "{054A6262-BB41-481F-9708-F18A8F90CE87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{AE16CFCF-24F7-4311-A464-7802E5D14F99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE16CFCF-24F7-4311-A464-7802E5D14F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE16CFCF-24F7-4311-A464-7802E5D14F99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA95ECA2-645F-4C9C-8BAE-0F011C9CD6C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA95ECA2-645F-4C9C-8BAE-0F011C9CD6C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA95ECA2-645F-4C9C-8BAE-0F011C9CD6C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA95ECA2-645F-4C9C-8BAE-0F011C9CD6C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{054A6262-BB41-481F-9708-F18A8F90CE87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{054A6262-BB41-481F-9708-F18A8F90CE87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{054A6262-BB41-481F-9708-F18A8F90CE87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{054A6262-BB41-481F-9708-F18A8F90CE87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
