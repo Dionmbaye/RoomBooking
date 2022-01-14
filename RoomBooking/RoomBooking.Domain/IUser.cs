@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace RoomBooking.Domain
 {
-    public abstract class BaseEntity
+    public interface  IUser
     {
-        public virtual int Id { get; set; }
+        public int Id { get; set; }
     }
 }
