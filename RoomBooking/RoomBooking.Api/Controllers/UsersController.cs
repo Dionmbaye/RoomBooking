@@ -10,7 +10,7 @@ namespace RoomBooking.Api.Controllers
     public class UsersController : Controller
     {
        
-        [HttpGet(Name = "GetUsers")]
+        [HttpGet]
         public IEnumerable<User> Get()
         {
             Users us= new Users();
