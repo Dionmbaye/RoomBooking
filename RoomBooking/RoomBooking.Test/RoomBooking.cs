@@ -13,6 +13,7 @@ namespace RoomBooking.Test
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
+            //
             _factory = new WebApplicationFactory<Startup>();
         }
 
