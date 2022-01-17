@@ -1,8 +1,8 @@
+using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoomBooking.Api;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace RoomBooking.Test
 {
@@ -13,7 +13,6 @@ namespace RoomBooking.Test
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
-            //
             _factory = new WebApplicationFactory<Startup>();
         }
 

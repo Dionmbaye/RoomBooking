@@ -1,5 +1,9 @@
-using Microsoft.AspNetCore;
-using RoomBooking.Api;
+using Microsoft.EntityFrameworkCore;
+using RoomBooking.Dal;
+using RoomBooking.Dal.Repositories;
+using RoomBooking.Domain.Interfaces.Dal;
+using RoomBooking.Domain.Interfaces.Services;
+using RoomBooking.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +13,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<KataHotelContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("KataHotelDatabase")));
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
