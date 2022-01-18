@@ -41,16 +41,16 @@ namespace RoomBooking.Test.Api
         [TestMethod]
         public async Task Should_Get_User_Where_Id_Equals_1()
         {
-            _userService.GetUser(1).Returns(
-          new User
-          {
-              Id = 1,
-              FirstName = "Test1",
-              LastName = "Test2"
-          }
-            );
+            _userService.GetUserAsync(1).Returns(
+            new User
+            {
+                Id = 1,
+                FirstName = "Test1",
+                LastName = "Test2"
+            }
+          );
 
-            var user = _userController.GetUser(1);
+            var user = await _userController.GetUserAsync(1);
 
             Assert.IsNotNull(user);
         }

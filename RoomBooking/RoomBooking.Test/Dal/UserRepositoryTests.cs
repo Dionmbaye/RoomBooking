@@ -64,7 +64,7 @@ namespace RoomBooking.Test.Dal
             using (var ctx = new KataHotelContext(_options))
             {
                 _userRepository = new UserRepository(ctx);
-                var user = _userRepository.GetUser(1);
+                var user = _userRepository.GetUserAsync(1);
 
                 Assert.IsNotNull(user);
                 Assert.AreEqual(user.Id, 1);

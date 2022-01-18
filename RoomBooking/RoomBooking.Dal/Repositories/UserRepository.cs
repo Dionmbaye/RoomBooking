@@ -11,7 +11,7 @@ namespace RoomBooking.Dal.Repositories
         public UserRepository(KataHotelContext ctx) =>
             _ctx = ctx;
 
-        public async Task<User> GetUser(int id)
+        public async Task<User> GetUserAsync(int id)
         {
             var user = await _ctx.Users.Where(x => x.Id == id).ToListAsync();
             

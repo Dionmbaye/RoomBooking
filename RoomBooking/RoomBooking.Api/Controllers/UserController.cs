@@ -35,9 +35,9 @@ namespace RoomBooking.Api.Controllers
 
         [HttpGet("{id}")]
         [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetUserResponse))]
-        public async Task<IActionResult> GetUser(int id)
+        public async Task<IActionResult> GetUserAsync(int id)
         {
-            var user = await _userService.GetUser(id);
+            var user = await _userService.GetUserAsync(id);
             var response = new GetUserResponse();
             
             response.User.FirstName = user.FirstName;
