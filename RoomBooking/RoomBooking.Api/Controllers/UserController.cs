@@ -34,11 +34,11 @@ namespace RoomBooking.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetUserResponse))]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetUserByIdResponse))]
         public async Task<IActionResult> GetUserAsync(int id)
         {
             var user = await _userService.GetUserAsync(id);
-            var response = new GetUserResponse();
+            var response = new GetUserByIdResponse();
             
             response.User.FirstName = user.FirstName;
             response.User.LastName = user.LastName; 

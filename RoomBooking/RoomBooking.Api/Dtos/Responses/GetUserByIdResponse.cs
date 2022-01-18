@@ -1,6 +1,6 @@
 ﻿namespace RoomBooking.Api.Dtos.Responses
 {
-    public class GetUserResponse
+    public class GetUserByIdResponse
     {
         public UserDto User { get; set; }=new UserDto();
     }
