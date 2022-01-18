@@ -29,7 +29,21 @@ namespace RoomBooking.Api.Controllers
                     FirstName = u.FirstName,
                     LastName = u.LastName
                 })
-             };
+            };
+            return Ok(response);
+        }
+
+        [HttpGet("{id}")]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetUserResponse))]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var user = await _userService.GetUser(id);
+            var response = new GetUserResponse();
+            
+            response.User.FirstName = user.FirstName;
+            response.User.LastName = user.LastName; 
+            response.User.Id=user.Id;
+           
             return Ok(response);
         }
     }

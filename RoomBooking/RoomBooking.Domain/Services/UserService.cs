@@ -11,7 +11,11 @@ namespace RoomBooking.Domain.Services
         public UserService(IUserRepository userRepository) =>
             _userRepository = userRepository;
 
+
         public async Task<IEnumerable<User>> GetUsersAsync() =>
             await _userRepository.GetUsersAsync();
+
+        public async Task<User> GetUser(int id)=>await _userRepository.GetUser(id);
+            
     }
 }
