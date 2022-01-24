@@ -53,10 +53,11 @@ namespace RoomBooking.Api.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpDelete("{id}")]
         public void DeleteUser(int id)
         {
             _userService.DeleteUser(id);
         }
+
     }
 }
