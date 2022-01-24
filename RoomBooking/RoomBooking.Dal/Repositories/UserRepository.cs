@@ -11,14 +11,24 @@ namespace RoomBooking.Dal.Repositories
         public UserRepository(KataHotelContext ctx) =>
             _ctx = ctx;
 
+        public void DeleteUser(int id)
+        {
+            var user= _ctx.Users.Where(x => x.Id == 1).FirstOrDefault();
+            if (user != null)
+            _ctx.Users.Remove(user);
+
+        }
+
         public async Task<User> GetUserAsync(int id)
         {
             var user = await _ctx.Users.Where(x => x.Id == id).ToListAsync();
-            
-            return new User { 
-                FirstName =user.First().FirstName, 
-                Id= user.First().Id, 
-                LastName=user.First().LastName};
+
+            return new User
+            {
+                FirstName = user.First().FirstName,
+                Id = user.First().Id,
+                LastName = user.First().LastName
+            };
         }
 
         public async Task<IEnumerable<User>> GetUsersAsync()

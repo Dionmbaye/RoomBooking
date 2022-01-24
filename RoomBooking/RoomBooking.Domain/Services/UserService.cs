@@ -16,6 +16,10 @@ namespace RoomBooking.Domain.Services
             await _userRepository.GetUsersAsync();
 
         public async Task<User> GetUserAsync(int id)=>await _userRepository.GetUserAsync(id);
-            
+
+        public void DeleteUser(int id)
+        {
+            _userRepository.DeleteUser(id);
+        }
     }
 }

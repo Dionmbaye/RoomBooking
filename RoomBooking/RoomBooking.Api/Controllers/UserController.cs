@@ -39,12 +39,24 @@ namespace RoomBooking.Api.Controllers
         {
             var user = await _userService.GetUserAsync(id);
             var response = new GetUserByIdResponse();
-            
-            response.User.FirstName = user.FirstName;
-            response.User.LastName = user.LastName; 
-            response.User.Id=user.Id;
-           
-            return Ok(response);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                response.User.FirstName = user.FirstName;
+                response.User.LastName = user.LastName;
+                response.User.Id = user.Id;
+
+                return Ok(response);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public void DeleteUser(int id)
+        {
+            _userService.DeleteUser(id);
         }
     }
 }

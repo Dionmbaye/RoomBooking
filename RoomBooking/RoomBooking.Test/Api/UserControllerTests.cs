@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using RoomBooking.Api.Controllers;
@@ -53,6 +54,14 @@ namespace RoomBooking.Test.Api
             var user = await _userController.GetUserAsync(1);
 
             Assert.IsNotNull(user);
+        }
+        [TestMethod]
+        public void Should_Delete_User_Where_Id_Equal_1()
+        {
+            var command = Substitute.For<UserController>();
+            command.DeleteUser(1);
+
+            command.Received().DeleteUser(1);
         }
     }
 }

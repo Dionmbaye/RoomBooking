@@ -71,5 +71,25 @@ namespace RoomBooking.Test.Dal
             }
 
         }
+
+        [TestMethod]
+        public void Should_Delete_User_Where_Id_Equal_1()
+        {
+            _options = new DbContextOptionsBuilder<KataHotelContext>()
+               .UseInMemoryDatabase("when_requesting_user")
+               .Options;
+            using (var ctx = new KataHotelContext(_options))
+            {
+                var fakeUserEntity = new UserEntity
+                {
+                    Id = 1,
+                    FirstName = "Test 1",
+                    LastName = "Test 2"
+                };
+                ctx.Users.Add(fakeUserEntity);
+                ctx.Users.Remove(fakeUserEntity);
+                ctx.SaveChanges();
+            }
+        }
     }
 }
