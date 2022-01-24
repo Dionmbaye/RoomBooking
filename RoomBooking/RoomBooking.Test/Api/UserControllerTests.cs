@@ -56,12 +56,13 @@ namespace RoomBooking.Test.Api
             Assert.IsNotNull(user);
         }
         [TestMethod]
-        public void Should_Delete_User_Where_Id_Equal_1()
+        public void Should_Call_DeleUser_Where_Id_Equal_1()
         {
-            var command = Substitute.For<UserController>();
-            command.DeleteUser(1);
+            var _userService = Substitute.For<IUserService>();
+            UserController userController = new UserController(_userService);
 
-            command.Received().DeleteUser(1);
+            userController.DeleteUser(1);
+            _userService.Received().DeleteUser(1);
         }
     }
 }
