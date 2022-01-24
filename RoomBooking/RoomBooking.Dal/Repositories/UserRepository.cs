@@ -16,6 +16,7 @@ namespace RoomBooking.Dal.Repositories
             var user= _ctx.Users.Where(x => x.Id == 1).FirstOrDefault();
             if (user != null)
             _ctx.Users.Remove(user);
+            _ctx.SaveChanges();
 
         }
 
