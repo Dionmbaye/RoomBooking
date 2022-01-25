@@ -15,11 +15,16 @@ namespace RoomBooking.Domain.Services
         public async Task<IEnumerable<User>> GetUsersAsync() =>
             await _userRepository.GetUsersAsync();
 
-        public async Task<User> GetUserAsync(int id)=>await _userRepository.GetUserAsync(id);
+        public async Task<User?> GetUserAsync(int id) => await _userRepository.GetUserAsync(id);
 
         public async Task<bool> DeleteUserAsync(int id)
         {
            return await _userRepository.DeleteUserAsync(id);
+        }
+
+        public async Task<bool> PutUserAsync(User user)
+        {
+            return await _userRepository.PutUserAsync(user);
         }
     }
 }

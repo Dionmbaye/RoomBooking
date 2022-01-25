@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using RoomBooking.Domain.Interfaces.Dal;

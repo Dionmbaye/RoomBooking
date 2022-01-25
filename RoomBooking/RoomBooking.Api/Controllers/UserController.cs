@@ -1,8 +1,10 @@
 ﻿using System.Net;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RoomBooking.Api.Dtos;
 using RoomBooking.Api.Dtos.Responses;
 using RoomBooking.Domain.Interfaces.Services;
+using RoomBooking.Domain.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace RoomBooking.Api.Controllers
@@ -12,9 +14,14 @@ namespace RoomBooking.Api.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService) =>
+        public UserController(IUserService userService, IMapper mapper)
+        {
             _userService = userService;
+            _mapper = mapper;
+        }
+
 
         [HttpGet]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -23,8 +30,6 @@ namespace RoomBooking.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetUsersResponse))]
         public async Task<IActionResult> GetUsersAsync()
         {
-            try
-            {
                 var users = await _userService.GetUsersAsync();
                 if (users == null)
                 {
@@ -32,21 +37,9 @@ namespace RoomBooking.Api.Controllers
                 }
                 var response = new GetUsersResponse
                 {
-                    Users = users.Select(u => new UserDto
-                    {
-                        Id = u.Id,
-                        FirstName = u.FirstName,
-                        LastName = u.LastName
-                    })
+                    Users = _mapper.Map<List<UserDto>>(users)
                 };
                 return users.Count() > 0 ? Ok(response) : NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-
-
         }
 
         [HttpGet("{id}")]
@@ -55,27 +48,18 @@ namespace RoomBooking.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetUserByIdResponse))]
         public async Task<IActionResult> GetUserAsync(int id)
         {
-            try
+            var user = await _userService.GetUserAsync(id);
+            var response = new GetUserByIdResponse();
+            response.User = _mapper.Map<UserDto>(user);
+            if (user == null)
             {
-                var user = await _userService.GetUserAsync(id);
-                var response = new GetUserByIdResponse();
-                if (user == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    response.User.FirstName = user.FirstName;
-                    response.User.LastName = user.LastName;
-                    response.User.Id = user.Id;
+                return NotFound();
+            }
+            else
+            {
+                return Ok(response);
+            }
 
-                    return Ok(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
         }
 
         [HttpDelete("{id}")]
@@ -84,8 +68,6 @@ namespace RoomBooking.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> DeleteUserAsync(int id)
         {
-            try
-            {
                 if (await _userService.DeleteUserAsync(id))
                 {
                     return NoContent();
@@ -94,13 +76,31 @@ namespace RoomBooking.Api.Controllers
                 {
                     return NotFound();
                 }
+        }
 
-            }
-            catch (Exception ex)
+        [HttpPut("{id}")]
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
+        [SwaggerResponse((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> PutUser(int id, UserDto user)
+        {
+
+
+            if (id != user.Id)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                BadRequest();
             }
-           
+            try
+            {
+                var userModel = _mapper.Map<User>(user);
+                var response =await _userService.PutUserAsync(userModel);
+                return Ok();
+            }
+            catch
+            {
+                return NotFound();
+            }
+
         }
 
     }

@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using RoomBooking.Api;
 using RoomBooking.Api.Controllers;
+using RoomBooking.Api.Dtos;
 using RoomBooking.Domain.Interfaces.Services;
 using RoomBooking.Domain.Models;
 
@@ -14,11 +18,22 @@ namespace RoomBooking.Test.Api
     {
         private readonly UserController _userController;
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
         public UserControllerTests()
         {
             _userService = Substitute.For<IUserService>();
-            _userController = new UserController(_userService);
+            if (_mapper == null)
+            {
+                var mappingConfig = new MapperConfiguration(mc =>
+                {
+                    mc.AddProfile(new MappingConfig());
+                });
+                IMapper mapper = mappingConfig.CreateMapper();
+                _mapper = mapper;
+            }
+
+            _userController = new UserController(_userService, _mapper);
         }
 
         [TestMethod]
@@ -68,11 +83,30 @@ namespace RoomBooking.Test.Api
         [TestMethod]
         public async Task Should_Call_DeleUser_Where_Id_Equal_1()
         {
-            var _userService = Substitute.For<IUserService>();
-            UserController userController = new UserController(_userService);
+            UserController userController = new UserController(_userService, _mapper);
 
             await userController.DeleteUserAsync(1);
             await _userService.Received().DeleteUserAsync(1);
+        }
+
+        [TestMethod]
+        public async Task Should_Update_User_Where_Id_Equal_1()
+        {
+            UserController userController = new UserController(_userService, _mapper);
+
+            _userService.GetUserAsync(1).Returns(
+               new User
+               {
+                   Id = 1,
+                   FirstName = "Test1",
+                   LastName = "Test2"
+               }
+            );
+            UserDto userUpdate = new UserDto { FirstName = "Sophie", Id = 1, LastName = "Anne" };
+            var user=new User { LastName = userUpdate.LastName, Id = userUpdate.Id, FirstName=userUpdate.FirstName };
+            var response = await _userController.PutUser(1, userUpdate);
+
+            Assert.IsNotNull(response);
         }
 
     }

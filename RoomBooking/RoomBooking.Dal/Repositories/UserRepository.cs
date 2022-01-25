@@ -28,7 +28,7 @@ namespace RoomBooking.Dal.Repositories
             }
         }
 
-        public async Task<User> GetUserAsync(int id)
+        public async Task<User?> GetUserAsync(int id)
         {
             var user = await _ctx.Users.SingleOrDefaultAsync(x => x.Id == id);
             if (user != null)
@@ -52,6 +52,20 @@ namespace RoomBooking.Dal.Repositories
                 FirstName = u.FirstName,
                 LastName = u.LastName
             });
+        }
+
+        public async Task<bool> PutUserAsync(User user)
+        {
+            var userEntity =  _ctx.Users.Where(x => x.Id == user.Id).FirstOrDefault();
+            if(userEntity != null)
+            {
+                userEntity.FirstName = user.FirstName;
+                userEntity.LastName = user.LastName;
+                _ctx.Entry(userEntity).State= EntityState.Modified;
+                await _ctx.SaveChangesAsync();
+                return true;
+            }      
+            return false;
         }
     }
 }
