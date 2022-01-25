@@ -104,6 +104,7 @@ namespace RoomBooking.Test.Api
             );
             UserDto userUpdate = new UserDto { FirstName = "Sophie", Id = 1, LastName = "Anne" };
             var user=new User { LastName = userUpdate.LastName, Id = userUpdate.Id, FirstName=userUpdate.FirstName };
+           
             var response = await _userController.PutUser(1, userUpdate);
 
             Assert.IsNotNull(response);

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoomBooking.Dal;
 using RoomBooking.Dal.Repositories;
+using RoomBooking.Domain.Models;
 
 namespace RoomBooking.Test.Dal
 {
@@ -72,12 +73,18 @@ namespace RoomBooking.Test.Dal
 
         }
 
+        public UserRepository Get_userRepository()
+        {
+            return _userRepository;
+        }
+
         [TestMethod]
         public async Task Should_Delete_User_Where_Id_Equal_1()
         {
             _options = new DbContextOptionsBuilder<KataHotelContext>()
                .UseInMemoryDatabase("when_requesting_user")
                .Options;
+            User? user = new User();
             using (var ctx = new KataHotelContext(_options))
             {
                 var fakeUserEntity = new UserEntity
@@ -88,18 +95,18 @@ namespace RoomBooking.Test.Dal
                 };
                 ctx.Users.Add(fakeUserEntity);
                 ctx.SaveChanges();
-                _userRepository = new UserRepository(ctx);
-                await _userRepository.DeleteUserAsync(1);
-                ctx.SaveChanges();
             }
 
             using (var ctx = new KataHotelContext(_options))
             {
                 _userRepository = new UserRepository(ctx);
-                var user = await _userRepository.GetUserAsync(1);
+                await _userRepository.DeleteUserAsync(1);
+                ctx.SaveChanges();
 
-                Assert.IsNull(user);
+                user = await _userRepository.GetUserAsync(1);
             }
+
+            Assert.IsNull(user);
         }
     }
 }
