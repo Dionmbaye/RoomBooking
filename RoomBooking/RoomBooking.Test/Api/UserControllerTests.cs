@@ -55,14 +55,25 @@ namespace RoomBooking.Test.Api
 
             Assert.IsNotNull(user);
         }
+
         [TestMethod]
-        public void Should_Call_DeleUser_Where_Id_Equal_1()
+        public async Task Should_Return_NotFound_Where_Id_Equals_0()
+        {
+            var user = await _userController.GetUserAsync(0);
+
+            Assert.IsNotNull(user);
+            Assert.IsInstanceOfType(user, typeof(NotFoundResult));
+        }
+
+        [TestMethod]
+        public async Task Should_Call_DeleUser_Where_Id_Equal_1()
         {
             var _userService = Substitute.For<IUserService>();
             UserController userController = new UserController(_userService);
 
-            userController.DeleteUser(1);
-            _userService.Received().DeleteUser(1);
+            await userController.DeleteUserAsync(1);
+            await _userService.Received().DeleteUserAsync(1);
         }
+
     }
 }

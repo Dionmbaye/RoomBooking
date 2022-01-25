@@ -17,46 +17,90 @@ namespace RoomBooking.Api.Controllers
             _userService = userService;
 
         [HttpGet]
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        [SwaggerResponse((int)HttpStatusCode.NoContent)]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetUsersResponse))]
         public async Task<IActionResult> GetUsersAsync()
         {
-            var users = await _userService.GetUsersAsync();
-            var response = new GetUsersResponse
+            try
             {
-                Users = users.Select(u => new UserDto
+                var users = await _userService.GetUsersAsync();
+                if (users == null)
                 {
-                    Id = u.Id,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName
-                })
-            };
-            return Ok(response);
+                    return NotFound();
+                }
+                var response = new GetUsersResponse
+                {
+                    Users = users.Select(u => new UserDto
+                    {
+                        Id = u.Id,
+                        FirstName = u.FirstName,
+                        LastName = u.LastName
+                    })
+                };
+                return users.Count() > 0 ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+
         }
 
         [HttpGet("{id}")]
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetUserByIdResponse))]
         public async Task<IActionResult> GetUserAsync(int id)
         {
-            var user = await _userService.GetUserAsync(id);
-            var response = new GetUserByIdResponse();
-            if (response == null)
+            try
             {
-                return NotFound();
-            }
-            else
-            {
-                response.User.FirstName = user.FirstName;
-                response.User.LastName = user.LastName;
-                response.User.Id = user.Id;
+                var user = await _userService.GetUserAsync(id);
+                var response = new GetUserByIdResponse();
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    response.User.FirstName = user.FirstName;
+                    response.User.LastName = user.LastName;
+                    response.User.Id = user.Id;
 
-                return Ok(response);
+                    return Ok(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpDelete("{id}")]
-        public void DeleteUser(int id)
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        [SwaggerResponse((int)HttpStatusCode.NoContent)]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> DeleteUserAsync(int id)
         {
-            _userService.DeleteUser(id);
+            try
+            {
+                if (await _userService.DeleteUserAsync(id))
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+           
         }
 
     }

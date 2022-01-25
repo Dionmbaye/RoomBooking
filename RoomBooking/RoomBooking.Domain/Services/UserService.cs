@@ -17,9 +17,9 @@ namespace RoomBooking.Domain.Services
 
         public async Task<User> GetUserAsync(int id)=>await _userRepository.GetUserAsync(id);
 
-        public void DeleteUser(int id)
+        public async Task<bool> DeleteUserAsync(int id)
         {
-            _userRepository.DeleteUser(id);
+           return await _userRepository.DeleteUserAsync(id);
         }
     }
 }

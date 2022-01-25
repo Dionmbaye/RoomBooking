@@ -43,7 +43,7 @@ namespace RoomBooking.Test.Dal
         }
 
         [TestMethod]
-        public void Should_Get_User_Where_id_equals_1()
+        public async Task Should_Get_User_Where_id_equals_1()
         {
             _options = new DbContextOptionsBuilder<KataHotelContext>()
                 .UseInMemoryDatabase("when_requesting_user")
@@ -58,13 +58,13 @@ namespace RoomBooking.Test.Dal
                     LastName = "Test 2"
                 };
                 ctx.Users.Add(fakeUserEntity);
-                ctx.SaveChanges();
+                await ctx.SaveChangesAsync();
             }
 
             using (var ctx = new KataHotelContext(_options))
             {
                 _userRepository = new UserRepository(ctx);
-                var user = _userRepository.GetUserAsync(1);
+                var user = await _userRepository.GetUserAsync(1);
 
                 Assert.IsNotNull(user);
                 Assert.AreEqual(user.Id, 1);
@@ -73,7 +73,7 @@ namespace RoomBooking.Test.Dal
         }
 
         [TestMethod]
-        public void Should_Delete_User_Where_Id_Equal_1()
+        public async Task Should_Delete_User_Where_Id_Equal_1()
         {
             _options = new DbContextOptionsBuilder<KataHotelContext>()
                .UseInMemoryDatabase("when_requesting_user")
@@ -87,8 +87,18 @@ namespace RoomBooking.Test.Dal
                     LastName = "Test 2"
                 };
                 ctx.Users.Add(fakeUserEntity);
-                ctx.Users.Remove(fakeUserEntity);
                 ctx.SaveChanges();
+                _userRepository = new UserRepository(ctx);
+                await _userRepository.DeleteUserAsync(1);
+                ctx.SaveChanges();
+            }
+
+            using (var ctx = new KataHotelContext(_options))
+            {
+                _userRepository = new UserRepository(ctx);
+                var user = await _userRepository.GetUserAsync(1);
+
+                Assert.IsNull(user);
             }
         }
     }

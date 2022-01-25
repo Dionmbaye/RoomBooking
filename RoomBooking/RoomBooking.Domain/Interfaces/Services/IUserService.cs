@@ -6,6 +6,6 @@ namespace RoomBooking.Domain.Interfaces.Services
     {
         public Task<IEnumerable<User>> GetUsersAsync();
         public Task<User> GetUserAsync(int id);
-        public void DeleteUser(int id);
+        public Task<bool> DeleteUserAsync(int id);
     }
 }
