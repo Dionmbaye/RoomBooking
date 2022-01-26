@@ -20,6 +20,9 @@ builder.Services.AddDbContext<KataHotelContext>(options => options.UseSqlServer(
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+
 
 // Auto Mapper Configurations
 var mapperConfig = new MapperConfiguration(mc =>

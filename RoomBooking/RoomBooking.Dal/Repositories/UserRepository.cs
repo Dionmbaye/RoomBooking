@@ -13,7 +13,7 @@ namespace RoomBooking.Dal.Repositories
 
         public async Task<bool> DeleteUserAsync(int id)
         {
-            var c = _ctx.Users;
+         
             var user=await _ctx.Users.SingleOrDefaultAsync(x => x.Id == id);
             
             if (user != null)
@@ -52,6 +52,27 @@ namespace RoomBooking.Dal.Repositories
                 FirstName = u.FirstName,
                 LastName = u.LastName
             });
+        }
+
+        public async Task<bool> InsertUserAsync(User user)
+        {
+            UserEntity userEntity = new UserEntity
+            {
+                FirstName=user.FirstName,
+                LastName=user.LastName,
+                Id=0
+            };
+            
+            try
+            {
+                _ctx.Users.Add(userEntity).Property(e => e.Id);
+                await _ctx.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> PutUserAsync(User user)

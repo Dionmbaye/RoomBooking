@@ -8,8 +8,13 @@ namespace RoomBooking.Api
     {
         public MappingConfig()
         {
+            //For user
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
+
+            //For Room
+            CreateMap<Room, RoomDto>();
+            CreateMap<RoomDto, Room>();
         }
     }
 }

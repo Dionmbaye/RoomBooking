@@ -26,7 +26,7 @@ namespace RoomBooking.Dal
             {
                 entity.ToTable("Booking");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Date).HasColumnType("date");
 
@@ -41,11 +41,12 @@ namespace RoomBooking.Dal
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Booking__UserId__7FEAFD3E");
-            });
 
+            });
+            
             modelBuilder.Entity<RoomEntity>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
@@ -54,7 +55,8 @@ namespace RoomBooking.Dal
 
             modelBuilder.Entity<UserEntity>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+               
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.FirstName)
                     .HasMaxLength(50)
@@ -63,7 +65,13 @@ namespace RoomBooking.Dal
                 entity.Property(e => e.LastName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                
+               
+
             });
+
+            
 
             OnModelCreatingPartial(modelBuilder);
         }

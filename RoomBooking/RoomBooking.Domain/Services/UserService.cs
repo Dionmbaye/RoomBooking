@@ -26,5 +26,10 @@ namespace RoomBooking.Domain.Services
         {
             return await _userRepository.PutUserAsync(user);
         }
+
+        public Task<bool> InsertUserAsync(User user)
+        {
+            return _userRepository.InsertUserAsync(user);
+        }
     }
 }

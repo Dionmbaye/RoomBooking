@@ -1,58 +1,59 @@
-﻿using System.Net;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoomBooking.Api.Dtos;
 using RoomBooking.Api.Dtos.Responses;
 using RoomBooking.Domain.Interfaces.Services;
 using RoomBooking.Domain.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace RoomBooking.Api.Controllers
 {
     [ApiController]
-    [Route("Users")]
-    public class UserController : Controller
+    [Route("Rooms")]
+    public class RoomController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IRoomService _roomService;
         private readonly IMapper _mapper;
 
-        public UserController(IUserService userService, IMapper mapper)
+        public RoomController(IRoomService roomService, IMapper mapper)
         {
-            _userService = userService;
+            _roomService = roomService;
             _mapper = mapper;
         }
 
-        //Get all users
+        //Get all rooms
         [HttpGet]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.NoContent)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetUsersResponse))]
-        public async Task<IActionResult> GetUsersAsync()
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetRoomsResponse))]
+        public async Task<IActionResult> GetRoomsAsync()
         {
-            var users = await _userService.GetUsersAsync();
-            if (users == null)
+            var rooms = await _roomService.GetRoomsAsync();
+            if (rooms == null)
             {
                 return NotFound();
             }
-            var response = new GetUsersResponse
+            var response = new GetRoomsResponse
             {
-                Users = _mapper.Map<List<UserDto>>(users)
+                Rooms = _mapper.Map<List<RoomDto>>(rooms)
             };
-            return users.Count() > 0 ? Ok(response) : NoContent();
+            return rooms.Count() > 0 ? Ok(response) : NoContent();
         }
 
-        //Get User by Id
+        //Get Room by Id
         [HttpGet("{id}")]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetUserByIdResponse))]
-        public async Task<IActionResult> GetUserAsync(int id)
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetRoomByIdResponse))]
+        public async Task<IActionResult> GetRoomAsync(int id)
         {
-            var user = await _userService.GetUserAsync(id);
-            var response = new GetUserByIdResponse();
-            response.User = _mapper.Map<UserDto>(user);
-            if (user == null)
+            var room = await _roomService.GetRoomAsync(id);
+            var response = new GetRoomByIdResponse();
+            response.Room = _mapper.Map<RoomDto>(room);
+            if (room == null)
             {
                 return NotFound();
             }
@@ -63,14 +64,14 @@ namespace RoomBooking.Api.Controllers
 
         }
 
-        //Delete User whith Id
+        //Delete Room whith Id
         [HttpDelete("{id}")]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.NoContent)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> DeleteUserAsync(int id)
+        public async Task<IActionResult> DeleteRoomAsync(int id)
         {
-            if (await _userService.DeleteUserAsync(id))
+            if (await _roomService.DeleteRoomAsync(id))
             {
                 return NoContent();
             }
@@ -80,23 +81,23 @@ namespace RoomBooking.Api.Controllers
             }
         }
 
-        //Update User with Id and User
+        //Update Room with Id and Room
         [HttpPut("{id}")]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         [SwaggerResponse((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> PutUser(int id, UserDto user)
+        public async Task<IActionResult> PutRoom(int id, RoomDto room)
         {
 
 
-            if (id != user.Id)
+            if (id != room.Id)
             {
                 BadRequest();
             }
             try
             {
-                var userModel = _mapper.Map<User>(user);
-                var response = await _userService.PutUserAsync(userModel);
+                var roomModel = _mapper.Map<Room>(room);
+                var response = await _roomService.PutRoomAsync(roomModel);
                 return Ok();
             }
             catch
@@ -106,14 +107,14 @@ namespace RoomBooking.Api.Controllers
 
         }
 
-        //Post User
+        //Post Room
         [HttpPost]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         [SwaggerResponse((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> PostUser(UserDto user)
+        public async Task<IActionResult> PostRoom(RoomDto room)
         {
-            var userModel = _mapper.Map<User>(user);
-            var response = await _userService.InsertUserAsync(userModel);
+            var roomModel = _mapper.Map<Room>(room);
+            var response = await _roomService.InsertRoomAsync(roomModel);
             if (response)
             {
                 return Ok();
@@ -125,6 +126,5 @@ namespace RoomBooking.Api.Controllers
 
 
         }
-
     }
 }

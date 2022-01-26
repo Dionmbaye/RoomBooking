@@ -82,7 +82,7 @@ namespace RoomBooking.Test.Dal
         public async Task Should_Delete_User_Where_Id_Equal_1()
         {
             _options = new DbContextOptionsBuilder<KataHotelContext>()
-               .UseInMemoryDatabase("when_requesting_user")
+               .UseInMemoryDatabase("when_delete_user")
                .Options;
             User? user = new User();
             using (var ctx = new KataHotelContext(_options))
@@ -105,6 +105,54 @@ namespace RoomBooking.Test.Dal
             }
 
             Assert.IsNull(user);
+        }
+
+        [TestMethod]
+        public async Task Should_Put_User()
+        {
+            _options = new DbContextOptionsBuilder<KataHotelContext>()
+               .UseInMemoryDatabase("when_put_user")
+               .Options;
+            var updated = false;
+
+            using (var ctx = new KataHotelContext(_options))
+            {
+                var fakeUser = new User
+                {
+                    Id = 1,
+                    FirstName = "New Test 1",
+                    LastName = "New Test 2"
+                };
+
+                _userRepository = new UserRepository(ctx);
+                updated =await _userRepository.PutUserAsync(fakeUser);
+            }
+
+            Assert.AreEqual(true, updated);
+        }
+
+        [TestMethod]
+        public async Task Should_Insert_User()
+        {
+            _options = new DbContextOptionsBuilder<KataHotelContext>()
+               .UseInMemoryDatabase("when_put_user")
+               .Options;
+            var inserted = false;
+
+            using (var ctx = new KataHotelContext(_options))
+            {
+                var fakeUser = new User
+                {
+                    Id = 1,
+                    FirstName = "New Test 1",
+                    LastName = "New Test 2"
+                };
+
+                _userRepository = new UserRepository(ctx);
+                inserted = await _userRepository.InsertUserAsync(fakeUser);
+            }
+
+            Assert.AreEqual(true, inserted);
         }
     }
 }
