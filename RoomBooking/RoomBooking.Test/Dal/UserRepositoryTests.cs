@@ -101,8 +101,6 @@ namespace RoomBooking.Test.Dal
             {
                 _userRepository = new UserRepository(ctx);
                 await _userRepository.DeleteUserAsync(1);
-                ctx.SaveChanges();
-
                 user = await _userRepository.GetUserAsync(1);
             }
 
