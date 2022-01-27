@@ -18,7 +18,6 @@ namespace RoomBooking.Test.Dal
         private DbContextOptions<KataHotelContext>? _options;
 
         [TestMethod]
-        [Priority(0)]
         public async Task Should_Get_Booking_Where_id_equals_2()
         {
             //Arrange
