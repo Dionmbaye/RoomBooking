@@ -33,12 +33,14 @@ namespace RoomBooking.Dal
                 entity.HasOne(d => d.Room)
                     .WithMany(p => p.Bookings)
                     .HasForeignKey(d => d.RoomId)
+                    .IsRequired()
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Booking__RoomId__7EF6D905");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Bookings)
                     .HasForeignKey(d => d.UserId)
+                    .IsRequired()
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Booking__UserId__7FEAFD3E");
 

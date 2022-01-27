@@ -14,16 +14,22 @@ namespace RoomBooking.Test.Dal
     [TestClass]
     public class RoomRepositoryTests
     {
-        private RoomRepository? _RoomRepository;
+        private RoomRepository? _roomRepository;
         private DbContextOptions<KataHotelContext>? _options;
+
+        public RoomRepository Get_RoomRepository()
+        {
+            return _roomRepository;
+        }
 
         [TestMethod]
         public async Task Should_Get_Rooms()
         {
+            //Arrange
             _options = new DbContextOptionsBuilder<KataHotelContext>()
                 .UseInMemoryDatabase("when_requesting_Rooms")
                 .Options;
-
+            IEnumerable<Room>? rooms = null;
             using (var ctx = new KataHotelContext(_options))
             {
                 var fakeRoomEntity = new RoomEntity
@@ -35,23 +41,26 @@ namespace RoomBooking.Test.Dal
                 await ctx.SaveChangesAsync();
             }
 
+            //Act
             using (var ctx = new KataHotelContext(_options))
             {
-                _RoomRepository = new RoomRepository(ctx);
-                var Rooms = await _RoomRepository.GetRoomsAsync();
-
-                Assert.IsNotNull(Rooms);
-                Assert.AreEqual(Rooms.Count(), 1);
+                _roomRepository = new RoomRepository(ctx);
+                rooms = await _roomRepository.GetRoomsAsync();
             }
+
+            //Assert
+            Assert.IsNotNull(rooms);
+            Assert.AreEqual(rooms.Count(), 1);
         }
 
         [TestMethod]
         public async Task Should_Get_Room_Where_id_equals_1()
         {
+            //Arrange
             _options = new DbContextOptionsBuilder<KataHotelContext>()
                 .UseInMemoryDatabase("when_requesting_Room")
                 .Options;
-
+            Room? room = null;
             using (var ctx = new KataHotelContext(_options))
             {
                 var fakeRoomEntity = new RoomEntity
@@ -63,25 +72,23 @@ namespace RoomBooking.Test.Dal
                 await ctx.SaveChangesAsync();
             }
 
+            //Act
             using (var ctx = new KataHotelContext(_options))
             {
-                _RoomRepository = new RoomRepository(ctx);
-                var Room = await _RoomRepository.GetRoomAsync(1);
-
-                Assert.IsNotNull(Room);
-                Assert.AreEqual(Room.Id, 1);
+                _roomRepository = new RoomRepository(ctx);
+                room = await _roomRepository.GetRoomAsync(1);
             }
 
-        }
+            //Assert
+            Assert.IsNotNull(room);
+            Assert.AreEqual(room.Id, 1);
 
-        public RoomRepository Get_RoomRepository()
-        {
-            return _RoomRepository;
         }
 
         [TestMethod]
         public async Task Should_Delete_Room_Where_Id_Equal_1()
         {
+            //Arrange
             _options = new DbContextOptionsBuilder<KataHotelContext>()
                .UseInMemoryDatabase("when_delete_Room")
                .Options;
@@ -97,24 +104,28 @@ namespace RoomBooking.Test.Dal
                 ctx.SaveChanges();
             }
 
+            //Act
             using (var ctx = new KataHotelContext(_options))
             {
-                _RoomRepository = new RoomRepository(ctx);
-                await _RoomRepository.DeleteRoomAsync(1);
-                Room = await _RoomRepository.GetRoomAsync(1);
+                _roomRepository = new RoomRepository(ctx);
+                await _roomRepository.DeleteRoomAsync(1);
+                Room = await _roomRepository.GetRoomAsync(1);
             }
 
+            //Assert
             Assert.IsNull(Room);
         }
 
         [TestMethod]
         public async Task Should_Put_Room()
         {
+            //Arrange
             _options = new DbContextOptionsBuilder<KataHotelContext>()
                .UseInMemoryDatabase("when_put_Room")
                .Options;
             var updated = false;
 
+            //Act
             using (var ctx = new KataHotelContext(_options))
             {
                 var fakeRoom = new Room
@@ -123,21 +134,24 @@ namespace RoomBooking.Test.Dal
                     Name = "Test 1"
                 };
 
-                _RoomRepository = new RoomRepository(ctx);
-                updated = await _RoomRepository.PutRoomAsync(fakeRoom);
+                _roomRepository = new RoomRepository(ctx);
+                updated = await _roomRepository.PutRoomAsync(fakeRoom);
             }
 
+            //Assert
             Assert.AreEqual(true, updated);
         }
 
         [TestMethod]
         public async Task Should_Insert_Room()
         {
+            //Arrange
             _options = new DbContextOptionsBuilder<KataHotelContext>()
                .UseInMemoryDatabase("when_put_Room")
                .Options;
             var inserted = false;
 
+            //Act
             using (var ctx = new KataHotelContext(_options))
             {
                 var fakeRoom = new Room
@@ -146,10 +160,11 @@ namespace RoomBooking.Test.Dal
                     Name = "Test 1"
                 };
 
-                _RoomRepository = new RoomRepository(ctx);
-                inserted = await _RoomRepository.InsertRoomAsync(fakeRoom);
+                _roomRepository = new RoomRepository(ctx);
+                inserted = await _roomRepository.InsertRoomAsync(fakeRoom);
             }
 
+            //Assert
             Assert.AreEqual(true, inserted);
         }
     }
