@@ -11,30 +11,30 @@ namespace RoomBooking.Domain.Services
 {
     public class RoomService:IRoomService
     {
-        private readonly IRoomRepository _RoomRepository;
+        private readonly IRoomRepository _roomRepository;
 
         public RoomService(IRoomRepository RoomRepository) =>
-            _RoomRepository = RoomRepository;
+            _roomRepository = RoomRepository;
 
 
         public async Task<IEnumerable<Room>> GetRoomsAsync() =>
-            await _RoomRepository.GetRoomsAsync();
+            await _roomRepository.GetRoomsAsync();
 
-        public async Task<Room?> GetRoomAsync(int id) => await _RoomRepository.GetRoomAsync(id);
+        public async Task<Room?> GetRoomAsync(int id) => await _roomRepository.GetRoomAsync(id);
 
         public async Task<bool> DeleteRoomAsync(int id)
         {
-            return await _RoomRepository.DeleteRoomAsync(id);
+            return await _roomRepository.DeleteRoomAsync(id);
         }
 
         public async Task<bool> PutRoomAsync(Room Room)
         {
-            return await _RoomRepository.PutRoomAsync(Room);
+            return await _roomRepository.PutRoomAsync(Room);
         }
 
         public Task<bool> InsertRoomAsync(Room Room)
         {
-            return _RoomRepository.InsertRoomAsync(Room);
+            return _roomRepository.InsertRoomAsync(Room);
         }
     }
 }

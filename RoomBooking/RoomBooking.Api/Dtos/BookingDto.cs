@@ -2,7 +2,7 @@
 
 namespace RoomBooking.Api.Dtos
 {
-    public class BookinDto
+    public class BookingDto
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

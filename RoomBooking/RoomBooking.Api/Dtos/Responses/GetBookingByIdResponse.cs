@@ -2,6 +2,6 @@
 {
     public class GetBookingByIdResponse
     {
-        public BookinDto Booking { get; set; } = new BookinDto();
+        public BookingDto Booking { get; set; } = new BookingDto();
     }
 }

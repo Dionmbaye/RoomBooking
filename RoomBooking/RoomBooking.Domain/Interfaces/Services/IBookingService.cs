@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingBooking.Domain.Interfaces.Dal
+namespace RoomBooking.Domain.Interfaces.Services
 {
-    public interface IBookingRepository
+    public interface IBookingService
     {
         public Task<IEnumerable<Booking>> GetBookingsAsync();
         public Task<Booking?> GetBookingAsync(int id);
         public Task<bool> DeleteBookingAsync(int id);
-        public Task<bool> PutBookingAsync(Booking booking);
-        public Task<bool> InsertBookingAsync(Booking booking);
+        public Task<bool> PutBookingAsync(Booking Booking);
+        public Task<bool> InsertBookingAsync(Booking Booking);
     }
 }

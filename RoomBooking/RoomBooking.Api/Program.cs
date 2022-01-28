@@ -1,4 +1,5 @@
 using AutoMapper;
+using BookingBooking.Domain.Interfaces.Dal;
 using Microsoft.EntityFrameworkCore;
 using RoomBooking.Api;
 using RoomBooking.Dal;
@@ -22,6 +23,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 
 // Auto Mapper Configurations

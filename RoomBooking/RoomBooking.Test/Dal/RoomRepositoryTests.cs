@@ -124,16 +124,18 @@ namespace RoomBooking.Test.Dal
                .UseInMemoryDatabase("when_put_Room")
                .Options;
             var updated = false;
+            var fakeRoom = new Room
+            {
+                Id = 1,
+                Name = "Test 1"
+            };
 
             //Act
             using (var ctx = new KataHotelContext(_options))
             {
-                var fakeRoom = new Room
-                {
-                    Id = 1,
-                    Name = "Test 1"
-                };
 
+                ctx.Rooms.Add(new RoomEntity { Id = fakeRoom.Id, Name = fakeRoom.Name });
+                await ctx.SaveChangesAsync();
                 _roomRepository = new RoomRepository(ctx);
                 updated = await _roomRepository.PutRoomAsync(fakeRoom);
             }
@@ -147,7 +149,7 @@ namespace RoomBooking.Test.Dal
         {
             //Arrange
             _options = new DbContextOptionsBuilder<KataHotelContext>()
-               .UseInMemoryDatabase("when_put_Room")
+               .UseInMemoryDatabase("when_insert_Room")
                .Options;
             var inserted = false;
 

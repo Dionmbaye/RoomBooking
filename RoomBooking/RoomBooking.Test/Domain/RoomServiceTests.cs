@@ -14,19 +14,19 @@ namespace RoomBooking.Test.Domain
     [TestClass]
     public class RoomServiceTests
     {
-        private readonly RoomService _RoomService;
-        private readonly IRoomRepository _RoomRepository;
+        private readonly RoomService _roomService;
+        private readonly IRoomRepository _roomRepository;
 
         public RoomServiceTests()
         {
-            _RoomRepository = Substitute.For<IRoomRepository>();
-            _RoomService = new RoomService(_RoomRepository);
+            _roomRepository = Substitute.For<IRoomRepository>();
+            _roomService = new RoomService(_roomRepository);
         }
 
         [TestMethod]
         public async Task Should_Get_Rooms()
         {
-            _RoomRepository.GetRoomsAsync().Returns(new List<Room>
+            _roomRepository.GetRoomsAsync().Returns(new List<Room>
             {
                 new Room
                 {
@@ -35,7 +35,7 @@ namespace RoomBooking.Test.Domain
                 }
             });
 
-            var rooms = await _RoomService.GetRoomsAsync();
+            var rooms = await _roomService.GetRoomsAsync();
 
             Assert.IsNotNull(rooms);
         }
@@ -43,7 +43,7 @@ namespace RoomBooking.Test.Domain
         [TestMethod]
         public async Task Should_Get_Room_Where_Id_Equals_1()
         {
-            _RoomRepository.GetRoomAsync(1).Returns(
+            _roomRepository.GetRoomAsync(1).Returns(
                 new Room
                 {
                     Id = 1,
@@ -51,7 +51,7 @@ namespace RoomBooking.Test.Domain
                 }
             );
 
-            var room = await _RoomService.GetRoomAsync(1);
+            var room = await _roomService.GetRoomAsync(1);
 
             Assert.IsNotNull(room);
         }
@@ -65,9 +65,9 @@ namespace RoomBooking.Test.Domain
                 Name = "Test1"
             };
 
-            _RoomRepository.PutRoomAsync(room).Returns(true);
+            _roomRepository.PutRoomAsync(room).Returns(true);
 
-            var response = await _RoomService.PutRoomAsync(room);
+            var response = await _roomService.PutRoomAsync(room);
 
             Assert.AreEqual(true, response);
         }
@@ -81,9 +81,9 @@ namespace RoomBooking.Test.Domain
                 Name = "Test1"
             };
 
-            _RoomRepository.InsertRoomAsync(room).Returns(true);
+            _roomRepository.InsertRoomAsync(room).Returns(true);
 
-            var response = await _RoomService.InsertRoomAsync(room);
+            var response = await _roomService.InsertRoomAsync(room);
 
             Assert.AreEqual(true, response);
         }

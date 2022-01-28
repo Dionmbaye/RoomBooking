@@ -2,6 +2,6 @@
 {
     public class GetBookingsResponse
     {
-        public IEnumerable<BookinDto> Bookings { get; set; } = new List<BookinDto>();
+        public IEnumerable<BookingDto> Bookings { get; set; } = new List<BookingDto>();
     }
 }
