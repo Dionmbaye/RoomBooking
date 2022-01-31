@@ -68,7 +68,7 @@ namespace RoomBooking.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.NoContent)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> DeleteUserAsync(int id)
+        public async Task<IActionResult> DeleteUserAsync([FromRoute] int id)
         {
             if (await _userService.DeleteUserAsync(id))
             {
@@ -85,44 +85,55 @@ namespace RoomBooking.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         [SwaggerResponse((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> PutUser(int id, UserDto user)
+        public async Task<IActionResult> PutUser([FromRoute]int id, [FromBody]UserDto user)
         {
 
-
-            if (id != user.Id)
+            if (ModelState.IsValid)
             {
-                BadRequest();
+                if (id != user.Id)
+                {
+                    BadRequest();
+                }
+                try
+                {
+                    var userModel = _mapper.Map<User>(user);
+                    var response = await _userService.PutUserAsync(userModel);
+                    return Ok();
+                }
+                catch
+                {
+                    return NotFound();
+                }
             }
-            try
+            else
             {
-                var userModel = _mapper.Map<User>(user);
-                var response = await _userService.PutUserAsync(userModel);
-                return Ok();
+                return BadRequest(ModelState);
             }
-            catch
-            {
-                return NotFound();
-            }
-
         }
 
         //Post User
         [HttpPost]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         [SwaggerResponse((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> PostUser(UserDto user)
+        public async Task<IActionResult> PostUser([FromBody]UserDto user)
         {
-            var userModel = _mapper.Map<User>(user);
-            var response = await _userService.InsertUserAsync(userModel);
-            if (response)
+            if (ModelState.IsValid)
             {
-                return Ok();
+                var userModel = _mapper.Map<User>(user);
+                var response = await _userService.InsertUserAsync(userModel);
+                if (response)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             else
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-
 
         }
 

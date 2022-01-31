@@ -89,22 +89,27 @@ namespace RoomBooking.Api.Controllers
         public async Task<IActionResult> PutRoom([FromRoute] int id, [FromBody] RoomDto room)
         {
 
-
-            if (id != room.Id)
+            if (ModelState.IsValid)
             {
-                BadRequest();
+                if (id != room.Id)
+                {
+                    BadRequest();
+                }
+                try
+                {
+                    var roomModel = _mapper.Map<Room>(room);
+                    var response = await _roomService.PutRoomAsync(roomModel);
+                    return Ok();
+                }
+                catch
+                {
+                    return NotFound();
+                }
             }
-            try
+            else
             {
-                var roomModel = _mapper.Map<Room>(room);
-                var response = await _roomService.PutRoomAsync(roomModel);
-                return Ok();
+                return BadRequest(ModelState);
             }
-            catch
-            {
-                return NotFound();
-            }
-
         }
 
         //Post Room
@@ -113,16 +118,23 @@ namespace RoomBooking.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         public async Task<IActionResult> PostRoom([FromBody] RoomDto room)
         {
-            var roomModel = _mapper.Map<Room>(room);
-            var response = await _roomService.InsertRoomAsync(roomModel);
-            if (response)
+            if (ModelState.IsValid)
             {
-                return Ok();
+                var roomModel = _mapper.Map<Room>(room);
+                var response = await _roomService.InsertRoomAsync(roomModel);
+                if (response)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+
+                }
             }
             else
             {
-                return BadRequest();
-
+                return BadRequest(ModelState);
             }
         }
     }
