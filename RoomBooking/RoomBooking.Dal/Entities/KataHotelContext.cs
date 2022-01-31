@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace RoomBooking.Dal
 {
+
     public partial class KataHotelContext : DbContext
     {
         public KataHotelContext()
@@ -49,6 +50,7 @@ namespace RoomBooking.Dal
             modelBuilder.Entity<RoomEntity>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Name).IsUnique();
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)

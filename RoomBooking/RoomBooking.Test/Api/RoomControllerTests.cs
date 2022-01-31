@@ -9,7 +9,9 @@ using RoomBooking.Domain.Interfaces.Services;
 using RoomBooking.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -98,7 +100,7 @@ namespace RoomBooking.Test.Api
                new Room
                {
                    Id = 1,
-                   Name="Test"
+                   Name = "Test"
                }
             );
             RoomDto userUpdate = new RoomDto { Id = 1, Name = "Test" };
@@ -109,5 +111,66 @@ namespace RoomBooking.Test.Api
             Assert.IsNotNull(response);
         }
 
+        [TestMethod]
+        public async Task Should_Accept_Valid_Name()
+        {
+            RoomController roomController = new RoomController(_roomService, _mapper);
+            RoomDto room= new RoomDto { Name = "Test", Id=1};
+
+            var validationContext = new ValidationContext(room);
+            var errors = new List<ValidationResult>();
+
+            var result = Validator.TryValidateObject(room, validationContext, errors, true);
+
+            var response = await roomController.PostRoom(room);
+
+            // Assert
+            Assert.IsTrue(result);
+            Assert.AreEqual(errors.Count, 0);
+
+        }
+
+        [TestMethod]
+        public async Task Should_Return_Name_Field_Validation_Error()
+        {
+            RoomController roomController = new RoomController(_roomService, _mapper);
+            RoomDto room = new RoomDto { Name = "", Id = 1 };
+
+            var validationContext = new ValidationContext(room);
+            var errors = new List<ValidationResult>();
+
+            var result = Validator.TryValidateObject(room, validationContext, errors, true);
+
+            var response = await roomController.PostRoom(room);
+
+            // Assert
+            Assert.IsFalse(result);
+            Assert.AreEqual(errors.Count, 1);
+            Assert.AreEqual(errors.Single().MemberNames.Count(), 1);
+            Assert.AreEqual(errors.Single().MemberNames.Single(), nameof(RoomDto.Name));
+
+        }
+
+        [TestMethod]
+        public async Task Should_Return_Length_Name_Field_Validation_Error()
+        {
+            RoomController roomController = new RoomController(_roomService, _mapper);
+            RoomDto room = new RoomDto { Name = "UIUIUJUUIUIUIUIUIUIUUUIUDIUIUIUIUIUIUIUUIIUIUIUIUIUIUIUIUIUIUUIUIUIIUUUIUIUIUIUIUIUIUUUIUUUIUIUIUUIUUIUUIUIIUUIUIUIU", Id = 1 };
+
+            var validationContext = new ValidationContext(room);
+            var errors = new List<ValidationResult>();
+
+            var result = Validator.TryValidateObject(room, validationContext, errors, true);
+
+            var response = await roomController.PostRoom(room);
+
+            // Assert
+            Assert.IsFalse(result);
+            Assert.AreEqual(errors.Count, 1);
+            Assert.AreEqual(errors.Single().MemberNames.Count(), 1);
+            Assert.AreEqual(errors.Single().MemberNames.Single(), nameof(RoomDto.Name));
+
+        }
     }
 }
+

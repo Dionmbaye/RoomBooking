@@ -48,7 +48,7 @@ namespace RoomBooking.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetRoomByIdResponse))]
-        public async Task<IActionResult> GetRoomAsync(int id)
+        public async Task<IActionResult> GetRoomAsync([FromRoute] int id)
         {
             var room = await _roomService.GetRoomAsync(id);
             var response = new GetRoomByIdResponse();
@@ -69,7 +69,7 @@ namespace RoomBooking.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.NoContent)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> DeleteRoomAsync(int id)
+        public async Task<IActionResult> DeleteRoomAsync([FromRoute] int id)
         {
             if (await _roomService.DeleteRoomAsync(id))
             {
@@ -86,7 +86,7 @@ namespace RoomBooking.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         [SwaggerResponse((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> PutRoom(int id, RoomDto room)
+        public async Task<IActionResult> PutRoom([FromRoute] int id, [FromBody] RoomDto room)
         {
 
 
@@ -111,7 +111,7 @@ namespace RoomBooking.Api.Controllers
         [HttpPost]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
         [SwaggerResponse((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> PostRoom(RoomDto room)
+        public async Task<IActionResult> PostRoom([FromBody] RoomDto room)
         {
             var roomModel = _mapper.Map<Room>(room);
             var response = await _roomService.InsertRoomAsync(roomModel);
@@ -122,9 +122,8 @@ namespace RoomBooking.Api.Controllers
             else
             {
                 return BadRequest();
+
             }
-
-
         }
     }
 }
