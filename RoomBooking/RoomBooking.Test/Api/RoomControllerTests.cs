@@ -112,17 +112,15 @@ namespace RoomBooking.Test.Api
         }
 
         [TestMethod]
-        public async Task Should_Accept_Valid_Name()
+        public void Should_Accept_Valid_Name()
         {
             RoomController roomController = new RoomController(_roomService, _mapper);
-            RoomDto room= new RoomDto { Name = "Test", Id=1};
+            RoomDto room = new RoomDto { Name = "Test", Id = 1 };
 
             var validationContext = new ValidationContext(room);
             var errors = new List<ValidationResult>();
 
             var result = Validator.TryValidateObject(room, validationContext, errors, true);
-
-            var response = await roomController.PostRoom(room);
 
             // Assert
             Assert.IsTrue(result);
@@ -141,8 +139,6 @@ namespace RoomBooking.Test.Api
 
             var result = Validator.TryValidateObject(room, validationContext, errors, true);
 
-            var response = await roomController.PostRoom(room);
-
             // Assert
             Assert.IsFalse(result);
             Assert.AreEqual(errors.Count, 1);
@@ -152,7 +148,7 @@ namespace RoomBooking.Test.Api
         }
 
         [TestMethod]
-        public async Task Should_Return_Length_Name_Field_Validation_Error()
+        public void Should_Return_Length_Name_Field_Validation_Error()
         {
             RoomController roomController = new RoomController(_roomService, _mapper);
             RoomDto room = new RoomDto { Name = "UIUIUJUUIUIUIUIUIUIUUUIUDIUIUIUIUIUIUIUUIIUIUIUIUIUIUIUIUIUIUUIUIUIIUUUIUIUIUIUIUIUIUUUIUUUIUIUIUUIUUIUUIUIIUUIUIUIU", Id = 1 };
@@ -162,7 +158,6 @@ namespace RoomBooking.Test.Api
 
             var result = Validator.TryValidateObject(room, validationContext, errors, true);
 
-            var response = await roomController.PostRoom(room);
 
             // Assert
             Assert.IsFalse(result);
