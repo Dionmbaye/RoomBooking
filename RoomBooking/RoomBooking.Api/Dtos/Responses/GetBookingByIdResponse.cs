@@ -1,4 +1,6 @@
-﻿namespace RoomBooking.Api.Dtos.Responses
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RoomBooking.Api.Dtos.Responses
 {
     public class GetBookingByIdResponse
     {

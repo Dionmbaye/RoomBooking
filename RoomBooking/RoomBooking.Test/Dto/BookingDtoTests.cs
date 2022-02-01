@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 using RoomBooking.Api.Dtos;
+using RoomBooking.Domain.Interfaces.Services;
 using RoomBooking.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ namespace RoomBooking.Test.Dto
         [TestMethod]
         public void Should_Accept_Valid_Booking()
         {
-            BookingDto booking = GetTestBooking();  
+            BookingDto booking = GetTestBooking();
 
             var validationContext = new ValidationContext(booking);
             var errors = new List<ValidationResult>();
@@ -48,7 +50,7 @@ namespace RoomBooking.Test.Dto
 
         }
 
-          [TestMethod]
+        [TestMethod]
         public void Should_Return_Invalid_Date_Error()
         {
             BookingDto booking = GetTestBooking();
@@ -56,7 +58,6 @@ namespace RoomBooking.Test.Dto
 
             var validationContext = new ValidationContext(booking);
             var errors = new List<ValidationResult>();
-
             var result = Validator.TryValidateObject(booking, validationContext, errors, true);
 
             // Assert
@@ -90,14 +91,18 @@ namespace RoomBooking.Test.Dto
         {
             var room = new Room { Id = 1, Name = "Test" };
             var user = new User { FirstName = "Test1", LastName = "Test2", Id = 1 };
-            var BookingDto = new BookingDto
+            var _validatableObject = Substitute.For<IValidatableObject>();
+            var _dateTimeService = Substitute.For<IDateTimeService>();
+            _dateTimeService.GetDateTimeNow().Returns(new DateTime(2021, 12, 25, 10, 30, 50));
+            _dateTimeService.GetHourNow().Returns(10);
+            var BookingDto = new BookingDto(_dateTimeService)
             {
                 Id = 1,
-                Date = DateTime.Now, 
-                StartSlot = DateTime.Now.AddHours(1).Hour,
-                EndSlot= DateTime.Now.AddHours(3).Hour,
-                Room= room,
-                User= user
+                Date = new DateTime(2021, 12, 25, 10, 30, 50),
+                StartSlot = 11,
+                EndSlot = 14,
+                Room = room,
+                User = user
             };
             return BookingDto;
         }
