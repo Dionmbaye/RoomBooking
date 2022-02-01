@@ -38,6 +38,8 @@ var mapperConfig = new MapperConfiguration(mc =>
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
+ServiceLocator.SetLocatorProvider(builder.Services.BuildServiceProvider());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

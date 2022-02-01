@@ -8,14 +8,12 @@ namespace RoomBooking.Api.Dtos
     public class BookingDto: IValidatableObject
     {
         private readonly IDateTimeService _dateTimeService;
-        public BookingDto(IDateTimeService dateTimeService)
-        {
-            this._dateTimeService = dateTimeService;
-        }
 
         public BookingDto()
         {
+            _dateTimeService = ServiceLocator.Current.GetInstance<IDateTimeService>();
         }
+
         public int Id { get; set; }
         [Required]
         [DataType(DataType.DateTime)]
