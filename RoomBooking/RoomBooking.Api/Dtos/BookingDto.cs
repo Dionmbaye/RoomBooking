@@ -40,7 +40,7 @@ namespace RoomBooking.Api.Dtos
             }
             if(StartSlot<hournow)
             {
-                yield return new ValidationResult("Date must be equals or greater than now", new List<string> { "StartSlot" });
+                yield return new ValidationResult("StartSlot must be greater than now on hour", new List<string> { "StartSlot" });
             }
         }
     }
