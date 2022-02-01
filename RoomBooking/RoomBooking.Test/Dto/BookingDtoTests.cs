@@ -91,7 +91,6 @@ namespace RoomBooking.Test.Dto
         {
             var room = new Room { Id = 1, Name = "Test" };
             var user = new User { FirstName = "Test1", LastName = "Test2", Id = 1 };
-            var _validatableObject = Substitute.For<IValidatableObject>();
             var _dateTimeService = Substitute.For<IDateTimeService>();
             _dateTimeService.GetDateTimeNow().Returns(new DateTime(2021, 12, 25, 10, 30, 50));
             _dateTimeService.GetHourNow().Returns(10);
