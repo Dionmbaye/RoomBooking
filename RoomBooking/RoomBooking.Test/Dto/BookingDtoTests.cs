@@ -1,8 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using RoomBooking.Api;
 using RoomBooking.Api.Dtos;
 using RoomBooking.Domain.Interfaces.Services;
 using RoomBooking.Domain.Models;
+using RoomBooking.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -91,10 +94,17 @@ namespace RoomBooking.Test.Dto
         {
             var room = new Room { Id = 1, Name = "Test" };
             var user = new User { FirstName = "Test1", LastName = "Test2", Id = 1 };
-            var _dateTimeService = Substitute.For<IDateTimeService>();
-            _dateTimeService.GetDateTimeNow().Returns(new DateTime(2021, 12, 25, 10, 30, 50));
-            _dateTimeService.GetHourNow().Returns(10);
-            var BookingDto = new BookingDto(_dateTimeService)
+
+            var dateTimeService = Substitute.For<IDateTimeService>();
+            dateTimeService.GetDateTimeNow().Returns(new DateTime(2021, 12, 25, 10, 30, 50));
+            dateTimeService.GetHourNow().Returns(10);
+
+            var sc = new ServiceCollection();
+            sc.AddScoped((_) => dateTimeService);
+            var serviceProvider = sc.BuildServiceProvider();
+            ServiceLocator.SetLocatorProvider(serviceProvider);
+
+            var BookingDto = new BookingDto()
             {
                 Id = 1,
                 Date = new DateTime(2021, 12, 25, 10, 30, 50),
@@ -103,8 +113,8 @@ namespace RoomBooking.Test.Dto
                 Room = room,
                 User = user
             };
+
             return BookingDto;
         }
-
     }
 }

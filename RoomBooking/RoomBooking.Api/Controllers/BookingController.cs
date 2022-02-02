@@ -15,14 +15,13 @@ namespace RoomBooking.Api.Controllers
 
         private readonly IBookingService _bookingService;
         private readonly IMapper _mapper;
-        private readonly IDateTimeService _dateTimeService;
 
-        public BookingController(IBookingService bookingService, IMapper mapper, IDateTimeService dateTimeService)
+        public BookingController(IBookingService bookingService, IMapper mapper)
         {
             _bookingService = bookingService;
             _mapper = mapper;
-            _dateTimeService = dateTimeService;
         }
+
         //Get all rooms
         [HttpGet]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
