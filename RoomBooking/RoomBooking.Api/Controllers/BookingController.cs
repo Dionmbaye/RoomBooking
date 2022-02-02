@@ -52,13 +52,14 @@ namespace RoomBooking.Api.Controllers
         {
             var booking = await _bookingService.GetBookingAsync(id);
             var response = new GetBookingByIdResponse();
-            response.Booking = _mapper.Map<BookingDto>(booking);
+            
             if (booking == null)
             {
                 return NotFound();
             }
             else
             {
+                response.Booking = _mapper.Map<BookingDto>(booking);
                 return Ok(response);
             }
         }
@@ -91,10 +92,7 @@ namespace RoomBooking.Api.Controllers
             {
                 var bookingModel = _mapper.Map<Booking>(booking);
                 var slots = await _bookingService.InsertBookingAsync(bookingModel);
-                var response = new InsertBookingResponse
-                {
-                    Slots = _mapper.Map<List<SlotDto>>(slots)
-                };
+                
 
                 if (slots == null)
                 {
@@ -102,7 +100,11 @@ namespace RoomBooking.Api.Controllers
                 }
                 else
                 {
-                    if(slots.Count()==0)
+                    var response = new InsertBookingResponse
+                    {
+                        Slots = _mapper.Map<List<SlotDto>>(slots)
+                    };
+                    if (slots.Count()==0)
                     {
                         return NoContent();
                     }

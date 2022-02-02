@@ -52,13 +52,14 @@ namespace RoomBooking.Api.Controllers
         {
             var room = await _roomService.GetRoomAsync(id);
             var response = new GetRoomByIdResponse();
-            response.Room = _mapper.Map<RoomDto>(room);
+            
             if (room == null)
             {
                 return NotFound();
             }
             else
             {
+                response.Room = _mapper.Map<RoomDto>(room);
                 return Ok(response);
             }
 

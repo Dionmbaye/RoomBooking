@@ -51,13 +51,14 @@ namespace RoomBooking.Api.Controllers
         {
             var user = await _userService.GetUserAsync(id);
             var response = new GetUserByIdResponse();
-            response.User = _mapper.Map<UserDto>(user);
+            
             if (user == null)
             {
                 return NotFound();
             }
             else
             {
+                response.User = _mapper.Map<UserDto>(user);
                 return Ok(response);
             }
 
