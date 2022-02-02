@@ -1,6 +1,7 @@
 ﻿using BookingBooking.Domain.Interfaces.Dal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using RoomBooking.Domain.Interfaces.Dal;
 using RoomBooking.Domain.Models;
 using RoomBooking.Domain.Services;
 using System;
@@ -16,11 +17,15 @@ namespace RoomBooking.Test.Domain
     {
         private readonly BookingService _bookingService;
         private readonly IBookingRepository _bookingRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IRoomRepository _roomRepository;
 
         public BookingServiceTests()
         {
             _bookingRepository = Substitute.For<IBookingRepository>();
-            _bookingService = new BookingService(_bookingRepository);
+            _roomRepository = Substitute.For<IRoomRepository>();
+            _userRepository = Substitute.For<IUserRepository>();
+            _bookingService = new BookingService(_bookingRepository, _roomRepository, _userRepository);
         }
         [TestMethod]
         public async Task Should_Get_Bookings()

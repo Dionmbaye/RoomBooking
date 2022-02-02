@@ -5,6 +5,7 @@ using RoomBooking.Domain.Interfaces.Services;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using RoomBooking.Api.Dtos;
+using RoomBooking.Domain.Models;
 
 namespace RoomBooking.Api.Controllers
 {
@@ -76,6 +77,44 @@ namespace RoomBooking.Api.Controllers
             else
             {
                 return NotFound();
+            }
+        }
+
+        //Post Booking
+        [HttpPost]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
+        [SwaggerResponse((int)HttpStatusCode.OK)]
+        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(InsertBookingResponse))]
+        public async Task<IActionResult> PostBooking([FromBody] BookingDto booking)
+        {
+            if (ModelState.IsValid)
+            {
+                var bookingModel = _mapper.Map<Booking>(booking);
+                var slots = await _bookingService.InsertBookingAsync(bookingModel);
+                var response = new InsertBookingResponse
+                {
+                    Slots = _mapper.Map<List<SlotDto>>(slots)
+                };
+
+                if (slots == null)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    if(slots.Count()==0)
+                    {
+                        return NoContent();
+                    }
+                    else
+                    {
+                        return Conflict(response);
+                    }
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
             }
         }
     }

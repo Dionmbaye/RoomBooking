@@ -19,6 +19,10 @@ namespace RoomBooking.Api
             //For Booking
             CreateMap<Booking, BookingDto>();
             CreateMap<BookingDto, Booking>();
+
+            //For Slot
+            CreateMap<Slot, SlotDto>();
+            CreateMap<SlotDto, Slot>();
         }
     }
 }

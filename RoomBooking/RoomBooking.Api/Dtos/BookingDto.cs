@@ -32,7 +32,7 @@ namespace RoomBooking.Api.Dtos
         {
             var datenow = _dateTimeService.GetDateTimeNow();
             var hournow = _dateTimeService.GetHourNow();
-            if (Date<datenow)
+            if (Date.Date<datenow.Date)
             {
                 yield return new ValidationResult("Date must be equals or greater than now", new List<string> { "Date" });
             }
