@@ -111,7 +111,17 @@ namespace RoomBooking.Test.Api
             Assert.IsNotNull(response);
         }
 
-      
+        [TestMethod]
+        public async Task Should_Create_New_Room()
+        {
+            RoomController roomController = new RoomController(_roomService, _mapper);
+
+            RoomDto roomUpdate = new RoomDto { Name = "Test Room", Id = 1};
+
+            var response = await _roomController.PostRoom(roomUpdate);
+
+            Assert.IsNotNull(response);
+        }
     }
 }
 

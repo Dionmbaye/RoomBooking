@@ -91,25 +91,25 @@ namespace RoomBooking.Api.Controllers
             if (ModelState.IsValid)
             {
                 var bookingModel = _mapper.Map<Booking>(booking);
-                var slots = await _bookingService.InsertBookingAsync(bookingModel);
+                var slots = await _bookingService.BookRoom(bookingModel);
                 
-
                 if (slots == null)
                 {
                     return BadRequest();
                 }
                 else
                 {
-                    var response = new InsertBookingResponse
-                    {
-                        Slots = _mapper.Map<List<SlotDto>>(slots)
-                    };
-                    if (slots.Count()==0)
+                    if (slots.Count() == 0)
                     {
                         return NoContent();
                     }
                     else
                     {
+                        var response = new InsertBookingResponse
+                    {
+                        Slots = _mapper.Map<List<SlotDto>>(slots)
+                    };
+
                         return Conflict(response);
                     }
                 }

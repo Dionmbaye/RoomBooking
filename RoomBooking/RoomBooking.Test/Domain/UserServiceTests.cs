@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -47,11 +49,11 @@ namespace RoomBooking.Test.Domain
                 {
                     Id = 1,
                     FirstName = "Test1",
-                    LastName =  "Test2"
+                    LastName = "Test2"
                 }
             );
 
-            var user= await _userService.GetUserAsync(1);
+            var user = await _userService.GetUserAsync(1);
 
             Assert.IsNotNull(user);
         }
@@ -88,6 +90,35 @@ namespace RoomBooking.Test.Domain
             var response = await _userService.InsertUserAsync(user);
 
             Assert.AreEqual(true, response);
+        }
+
+        [TestMethod]
+        public async Task Should_Get_User_Bookings()
+        {
+            var user = new User
+            {
+                Id = 1,
+                FirstName = "Test1",
+                LastName = "Test2"
+            };
+            IEnumerable<Booking>? booking = null;
+            _userRepository.GetUserBookings(1).Returns(new List<Booking>
+            {
+                new Booking
+                {
+                    Date= DateTime.Now,
+                    StartSlot=3,
+                    EndSlot=6,
+                    Room=new Room{Id=1, Name="Test"},
+                    User=user,
+                    Id=1
+                }
+            });
+
+            booking = await _userService.GetUserBookingsAsync(1);
+
+            Assert.IsNotNull(booking);
+            Assert.AreEqual(booking.Count(), 1);
         }
     }
 }

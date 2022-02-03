@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -103,12 +104,52 @@ namespace RoomBooking.Test.Api
                }
             );
             UserDto userUpdate = new UserDto { FirstName = "Sophie", Id = 1, LastName = "Anne" };
-            var user=new User { LastName = userUpdate.LastName, Id = userUpdate.Id, FirstName=userUpdate.FirstName };
-           
+            var user = new User { LastName = userUpdate.LastName, Id = userUpdate.Id, FirstName = userUpdate.FirstName };
+
             var response = await _userController.PutUser(1, userUpdate);
 
             Assert.IsNotNull(response);
         }
 
+        [TestMethod]
+        public async Task Should_Get_Bookings_For_User()
+        {
+            var user = new User
+            {
+                Id = 1,
+                FirstName = "Test1",
+                LastName = "Test2"
+            };
+            _userService.GetUserBookingsAsync(1).Returns(new List<Booking>
+            {
+                new Booking
+                {
+                    Date= DateTime.Now,
+                    StartSlot=3,
+                    EndSlot=6,
+                    Room=new Room{Id=1, Name="Test"},
+                    User=user,
+                    Id=1
+                }
+            });
+
+            var response = await _userController.GetUserBookingsAsync(1);
+
+            Assert.IsNotNull(response);
+        }
+
+
+
+        [TestMethod]
+        public async Task Should_Create_New_User()
+        {
+            UserController userController = new UserController(_userService, _mapper);
+
+            UserDto userUpdate = new UserDto { FirstName = "Sophie", Id = 1, LastName = "Anne" };
+
+            var response = await _userController.PostUser(userUpdate);
+
+            Assert.IsNotNull(response);
+        }
     }
 }

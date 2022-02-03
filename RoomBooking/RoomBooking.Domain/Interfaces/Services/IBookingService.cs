@@ -13,6 +13,6 @@ namespace RoomBooking.Domain.Interfaces.Services
         public Task<Booking?> GetBookingAsync(int id);
         public Task<bool> DeleteBookingAsync(int id);
         public Task<bool> PutBookingAsync(Booking Booking);
-        public Task<IEnumerable<Slot>?> InsertBookingAsync(Booking Booking);
+        public Task<IEnumerable<Slot>?> BookRoom(Booking Booking);
     }
 }

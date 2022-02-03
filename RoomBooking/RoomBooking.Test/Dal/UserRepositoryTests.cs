@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,6 +22,7 @@ namespace RoomBooking.Test.Dal
             _options = new DbContextOptionsBuilder<KataHotelContext>()
                 .UseInMemoryDatabase("when_requesting_users")
                 .Options;
+            IEnumerable<User> users = null;
 
             using (var ctx = new KataHotelContext(_options))
             {
@@ -36,11 +39,11 @@ namespace RoomBooking.Test.Dal
             using (var ctx = new KataHotelContext(_options))
             {
                 _userRepository = new UserRepository(ctx);
-                var users = await _userRepository.GetUsersAsync();
-
-                Assert.IsNotNull(users);
-                Assert.AreEqual(users.Count(), 1);
+                users = await _userRepository.GetUsersAsync();
             }
+
+            Assert.IsNotNull(users);
+            Assert.AreEqual(users.Count(), 1);
         }
 
         [TestMethod]
@@ -49,6 +52,7 @@ namespace RoomBooking.Test.Dal
             _options = new DbContextOptionsBuilder<KataHotelContext>()
                 .UseInMemoryDatabase("when_requesting_user")
                 .Options;
+            User user = null;
 
             using (var ctx = new KataHotelContext(_options))
             {
@@ -65,11 +69,11 @@ namespace RoomBooking.Test.Dal
             using (var ctx = new KataHotelContext(_options))
             {
                 _userRepository = new UserRepository(ctx);
-                var user = await _userRepository.GetUserAsync(1);
-
-                Assert.IsNotNull(user);
-                Assert.AreEqual(user.Id, 1);
+                user = await _userRepository.GetUserAsync(1);
             }
+
+            Assert.IsNotNull(user);
+            Assert.AreEqual(user.Id, 1);
 
         }
 
@@ -125,7 +129,7 @@ namespace RoomBooking.Test.Dal
                 };
 
                 _userRepository = new UserRepository(ctx);
-                updated =await _userRepository.PutUserAsync(fakeUser);
+                updated = await _userRepository.PutUserAsync(fakeUser);
             }
 
             Assert.AreEqual(true, updated);
@@ -153,6 +157,46 @@ namespace RoomBooking.Test.Dal
             }
 
             Assert.AreEqual(true, inserted);
+        }
+
+        [TestMethod]
+        public async Task Should_Get_User_Bookings()
+        {
+            _options = new DbContextOptionsBuilder<KataHotelContext>()
+               .UseInMemoryDatabase("when_get_booking_for_user")
+               .Options;
+            IEnumerable<Booking> booking = null;
+            using (var ctx = new KataHotelContext(_options))
+            {
+                ctx.Bookings.Add(new BookingEntity
+                {
+                    Id = 1,
+                    StartSlot = 2,
+                    EndSlot = 4,
+                    Date = DateTime.Now,
+                    Room = new RoomEntity
+                    {
+                        Id = 1,
+                        Name = "Room2"
+                    },
+                    UserId = 1,
+                    RoomId = 1,
+                    User = new UserEntity
+                    {
+                        Id = 1,
+                        FirstName = "New Test 1",
+                        LastName = "New Test 2"
+                    }
+
+                });
+                await ctx.SaveChangesAsync();
+
+                _userRepository = new UserRepository(ctx);
+                booking = await _userRepository.GetUserBookings(1);
+            }
+
+            Assert.IsNotNull(booking);
+            Assert.AreEqual(booking.Count(), 1);
         }
     }
 }

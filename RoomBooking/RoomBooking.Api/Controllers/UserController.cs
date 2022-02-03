@@ -42,6 +42,28 @@ namespace RoomBooking.Api.Controllers
             return users.Count() > 0 ? Ok(response) : NoContent();
         }
 
+        //Get all bookings for user
+        [HttpGet]
+        [Route("{id}/Bookings")]
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        [SwaggerResponse((int)HttpStatusCode.NoContent)]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError)]
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(GetBookingsResponse))]
+        public async Task<IActionResult> GetUserBookingsAsync([FromRoute] int id)
+        {
+            
+            var bookings = await _userService.GetUserBookingsAsync(id);
+            if (bookings == null)
+            {
+                return NotFound();
+            }
+            var response = new GetBookingsResponse
+            {
+                Bookings = _mapper.Map<List<BookingDto>>(bookings)
+            };
+            return bookings.Count() > 0 ? Ok(response) : NoContent();
+        }
+
         //Get User by Id
         [HttpGet("{id}")]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]

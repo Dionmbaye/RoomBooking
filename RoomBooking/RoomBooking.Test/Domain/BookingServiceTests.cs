@@ -35,7 +35,7 @@ namespace RoomBooking.Test.Domain
                 new Booking
                 {
                     Id = 1,
-                    Date = DateTime.Now,
+                    Date = DateTime.Now.Date,
                     EndSlot = 10,
                     StartSlot=6,
                     Room=new Room{Id=1, Name="Test"},
@@ -87,6 +87,28 @@ namespace RoomBooking.Test.Domain
             var response = await _bookingService.PutBookingAsync(booking);
 
             Assert.AreEqual(true, response);
+        }
+
+        [TestMethod]
+        public async Task Should_Book_For_Room()
+        {
+            var booking = new Booking
+            {
+                Id = 1,
+                Date = DateTime.Now,
+                User = new User { Id = 1, FirstName = "Test", LastName = "Test" },
+                Room = new Room { Id = 1, Name = "Test" },
+                StartSlot = 6,
+                EndSlot = 10
+            };
+
+            _bookingRepository.InsertBookingAsync(booking).Returns(true);
+            _roomRepository.GetRoomsAsync().Returns(new List<Room> { new Room { Id = 1, Name="Test" } });
+            _userRepository.GetUsersAsync().Returns(new List<User> { new User { Id = 1, FirstName = "Test", LastName = "Test" }, });
+
+            var response = await _bookingService.BookRoom(booking);
+
+            Assert.IsNotNull(response);
         }
     }
 }

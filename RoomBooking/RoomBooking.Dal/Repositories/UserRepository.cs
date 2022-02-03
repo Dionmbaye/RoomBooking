@@ -43,6 +43,24 @@ namespace RoomBooking.Dal.Repositories
             return null;
         }
 
+        public async Task<IEnumerable<Booking>> GetUserBookings(int id)
+        {
+           var bookings= await _ctx.Bookings.Include(x => x.Room)
+                .Include(x => x.User)
+                .Where(x=>x.UserId==id)
+                .ToListAsync();
+
+            return bookings.Select(u => new Booking
+            {
+                Id = u.Id,
+                Date = u.Date,
+                EndSlot = u.EndSlot,
+                Room = new Room { Id = u.Room.Id, Name = u.Room.Name },
+                StartSlot = u.StartSlot,
+                User = new User { Id = u.User.Id, LastName = u.User.FirstName, FirstName = u.User.LastName, }
+                });
+        }
+
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
             var users = await _ctx.Users.ToListAsync();

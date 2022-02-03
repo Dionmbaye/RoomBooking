@@ -39,7 +39,7 @@ namespace RoomBooking.Domain.Services
             await _bookingRepository.GetBookingsAsync();
 
 
-        public async Task<IEnumerable<Slot>?> InsertBookingAsync(Booking booking)
+        public async Task<IEnumerable<Slot>?> BookRoom(Booking booking)
         {
             IEnumerable<Booking> allBookings = await _bookingRepository.GetBookingsAsync();
             IEnumerable<Room> allRooms = await _roomRepository.GetRoomsAsync();

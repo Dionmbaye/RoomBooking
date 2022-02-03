@@ -31,5 +31,10 @@ namespace RoomBooking.Domain.Services
         {
             return _userRepository.InsertUserAsync(user);
         }
+
+        public Task<IEnumerable<Booking>> GetUserBookingsAsync(int id)
+        {
+            return _userRepository.GetUserBookings(id);
+        }
     }
 }

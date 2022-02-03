@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using RoomBooking.Api;
 using RoomBooking.Api.Controllers;
+using RoomBooking.Api.Dtos;
 using RoomBooking.Domain.Interfaces.Services;
 using RoomBooking.Domain.Models;
 using System;
@@ -86,6 +89,29 @@ namespace RoomBooking.Test.Api
 
             Assert.IsNotNull(booking);
         }
+
+        [TestMethod]
+        public async Task Should_Book_For_Room_1()
+        {
+            var room = new Room { Id = 1, Name = "Test" };
+            var user = new User { FirstName = "Test1", LastName = "Test2", Id = 1 };
+
+            var book = new BookingDto
+            {
+                Id = 1,
+                Date = DateTime.Now,
+                StartSlot = 6,
+                EndSlot = 10,
+                Room = room,
+                User = user,
+            };
+            
+            var response = await _bookingController.PostBooking(book);
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOfType(response, typeof(NoContentResult));
+
+        }
+
 
         private static void ConfigureService()
         {
