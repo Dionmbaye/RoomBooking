@@ -91,7 +91,7 @@ namespace RoomBooking.Api.Controllers
             if (ModelState.IsValid)
             {
                 var bookingModel = _mapper.Map<Booking>(booking);
-                var slots = await _bookingService.BookRoom(bookingModel);
+                IEnumerable<Slot>? slots = await _bookingService.BookRoom(bookingModel);
                 
                 if (slots == null)
                 {

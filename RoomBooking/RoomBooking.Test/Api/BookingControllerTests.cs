@@ -7,11 +7,13 @@ using NSubstitute.ReturnsExtensions;
 using RoomBooking.Api;
 using RoomBooking.Api.Controllers;
 using RoomBooking.Api.Dtos;
+using RoomBooking.Api.Dtos.Responses;
 using RoomBooking.Domain.Interfaces.Services;
 using RoomBooking.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -111,6 +113,59 @@ namespace RoomBooking.Test.Api
             Assert.IsInstanceOfType(response, typeof(NoContentResult));
 
         }
+
+        [TestMethod]
+        public async Task Should_Return_BadRequest_When_Book_For_Room_1()
+        {
+            var book = new BookingDto
+            {
+                Id = 1,
+                Date = DateTime.Now,
+                StartSlot = 6,
+                EndSlot = 10
+            };
+
+            _bookingService.BookRoom(new Booking { 
+                Id = book.Id, 
+                Date = book.Date, 
+                StartSlot = book.StartSlot, 
+                EndSlot = book.EndSlot }).ReturnsNullForAnyArgs();
+            var response = await _bookingController.PostBooking(book);
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOfType(response, typeof(BadRequestResult));
+
+        }
+
+        [TestMethod]
+        public async Task Should_Return_Slots_When_Book_For_Room_1()
+        {
+            //Arrange
+            var book = new BookingDto
+            {
+                Id = 1,
+                Date = DateTime.Now,
+                StartSlot = 6,
+                EndSlot = 20
+            };
+
+            _bookingService.BookRoom(new Booking { Id = book.Id, 
+                Date = book.Date, 
+                StartSlot = book.StartSlot, 
+                EndSlot = book.EndSlot })
+                .ReturnsForAnyArgs(new List<Slot> { new Slot { Date = DateTime.Now, End = 6, Start = 1 },
+                    new Slot{Date=DateTime.Now, Start=20, End=24 } });
+
+            //Act
+            var response = await _bookingController.PostBooking(book);
+            var x = ((ConflictObjectResult)response).Value;
+
+            //Assert
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOfType(response, typeof(ConflictObjectResult));
+            Assert.AreEqual(2, ((InsertBookingResponse)x).Slots.Count());
+
+        }
+
 
 
         private static void ConfigureService()
