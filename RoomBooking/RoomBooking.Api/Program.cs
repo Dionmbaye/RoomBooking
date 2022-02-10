@@ -38,6 +38,15 @@ var mapperConfig = new MapperConfiguration(mc =>
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyOrigin",
+        builder => builder//.WithOrigins("http://localhost:3000/")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowAnyOrigin());
+});
+
 ServiceLocator.SetLocatorProvider(builder.Services.BuildServiceProvider());
 
 var app = builder.Build();
@@ -48,6 +57,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("MyOrigin");
 
 app.UseHttpsRedirection();
 
