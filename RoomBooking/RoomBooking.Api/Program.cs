@@ -41,7 +41,7 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddCors(options =>
 {
 options.AddPolicy("MyOrigin",
-    builder => builder.WithOrigins("localhost:3000")
+    builder => builder.WithOrigins("http://localhost:3000")
                       .AllowAnyMethod()
                       .AllowAnyHeader());
 });
