@@ -81,7 +81,7 @@ namespace RoomBooking.Domain.Services
             bookings=bookings.OrderBy(x=>x.StartSlot).ToList();
             foreach (Booking b in bookings)
             {
-                if((booking.StartSlot<b.EndSlot && booking.StartSlot>b.StartSlot) || (booking.EndSlot<=b.EndSlot && booking.EndSlot>b.StartSlot))
+                if((booking.StartSlot<b.EndSlot && booking.StartSlot>b.StartSlot) || (booking.EndSlot<=b.EndSlot && booking.EndSlot>b.StartSlot)|| (booking.StartSlot <= b.EndSlot && booking.StartSlot > b.StartSlot))
                 {
                     return true;
                 }
